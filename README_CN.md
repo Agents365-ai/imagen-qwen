@@ -24,6 +24,7 @@
 ## 特性
 
 - **通义千问 2.0 (Qwen-Image 2.0)**: 最新旗舰，原生 2K 分辨率，专业字体渲染
+- **通义千问编辑版 (Qwen-Image Edit)**: 指令式图像编辑（需 `--image` 输入图）
 - **通义千问经典版 (Qwen-Image legacy)**: 中英文文本渲染
 - **通义万相 (Wan Series)**: 写实图像和摄影级视觉效果，Wan2.7 支持 4K 输出
 - **Z-Image**: 轻量快速、低成本；擅长高保真人像和商品图
@@ -106,6 +107,9 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --model wan2.7-ima
 # 自定义尺寸
 python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --size 16:9 "宽屏风景" landscape.png
 
+# 编辑已有图片（需 --image）
+python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --model qwen-image-edit-max --image input.png "把背景换成海滩日落" edited.png
+
 # 使用负面提示词
 python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --negative "模糊" "高质量人像" portrait.png
 
@@ -121,7 +125,12 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --list-models
 | `qwen-image-2.0-pro-2026-06-22` | 最新快照版（2026 年 6 月），生成与编辑能力融合 |
 | `qwen-image-2.0` | 标准 2.0 版本，原生 2K |
 | `qwen-image-max` | 上代旗舰 |
+| `qwen-image-max-2025-12-30` | qwen-image-max 快照版，写实感增强、AI 痕迹更少 |
 | `qwen-image-plus` | 蒸馏加速版 |
+| `qwen-image-plus-2026-01-09` | qwen-image-plus 快照版（2026 年 1 月） |
+| `qwen-image-edit-max` | 旗舰图像编辑模型（需 `--image`） |
+| `qwen-image-edit-max-2026-01-16` | 最新编辑快照版（2026 年 1 月） |
+| `qwen-image-edit-plus` | 快速低成本图像编辑 |
 | `qwen-image` | 基础版 |
 | `wan2.7-image-pro` | 最新写实模型，最高 4K 输出 |
 | `wan2.7-image` | Wan 2.7 标准版，最高 2K |

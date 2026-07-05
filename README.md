@@ -24,6 +24,7 @@ A Claude Code / OpenClaw skill for AI image generation using Alibaba Cloud Baili
 ## Features
 
 - **Qwen-Image 2.0**: Latest flagship, native 2K, professional typography rendering
+- **Qwen-Image Edit**: Instruction-based image editing (`--image` input)
 - **Qwen-Image legacy**: Lighter Chinese/English text rendering models
 - **Wan Series**: Photorealistic images and photography-grade visuals, Wan2.7 supports 4K
 - **Z-Image**: Lightweight, fast and low-cost; high-fidelity portraits and product shots
@@ -106,6 +107,9 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --model wan2.7-ima
 # Custom size
 python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --size 16:9 "Wide landscape" landscape.png
 
+# Edit an existing image (requires --image)
+python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --model qwen-image-edit-max --image input.png "Change the background to a beach" edited.png
+
 # With negative prompt
 python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --negative "blurry" "High quality portrait" portrait.png
 
@@ -121,7 +125,12 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --list-models
 | `qwen-image-2.0-pro-2026-06-22` | Latest snapshot (Jun 2026), generation + editing fusion |
 | `qwen-image-2.0` | Standard 2.0 tier, native 2K |
 | `qwen-image-max` | Previous-gen flagship |
+| `qwen-image-max-2025-12-30` | qwen-image-max snapshot, improved realism |
 | `qwen-image-plus` | Distilled accelerated version |
+| `qwen-image-plus-2026-01-09` | qwen-image-plus snapshot (Jan 2026) |
+| `qwen-image-edit-max` | Flagship image editing (requires `--image`) |
+| `qwen-image-edit-max-2026-01-16` | Latest editing snapshot (Jan 2026) |
+| `qwen-image-edit-plus` | Fast, lower-cost image editing |
 | `qwen-image` | Base model |
 | `wan2.7-image-pro` | Latest photorealistic, up to 4K output |
 | `wan2.7-image` | Wan 2.7 standard, up to 2K |

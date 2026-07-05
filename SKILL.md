@@ -14,8 +14,9 @@ metadata: {"openclaw":{"requires":{"bins":["python3"],"env":["DASHSCOPE_API_KEY"
 
 Generate images using Alibaba Cloud Bailian API. **Default endpoint is China region**.
 
-Supports four model families:
+Supports five model families:
 - **Qwen-Image 2.0** (latest, native 2K): Flagship general-purpose generator with strong text rendering
+- **Qwen-Image Edit**: Instruction-based image editing (requires an input image)
 - **Qwen-Image legacy**: Lighter Chinese/English text rendering models
 - **Wan Series**: Photorealistic images and photography-grade visuals (Wan2.7 supports up to 4K)
 - **Z-Image**: Lightweight, fast and low-cost; strong at high-fidelity portraits and product shots
@@ -48,12 +49,24 @@ Automatically activate this skill when:
 | `qwen-image-2.0-pro-2026-06-22` | Latest snapshot (Jun 2026): generation + editing fusion, better text rendering and prompt adherence |
 | `qwen-image-2.0` | Standard 2.0 tier, native 2K |
 | `qwen-image-max` | Previous-gen flagship (Dec 2025) |
+| `qwen-image-max-2025-12-30` | qwen-image-max snapshot: improved realism, fewer AI artifacts |
+
+### Qwen-Image Edit family - Image Editing (MultiModalConversation API)
+
+Editing models require an input image via `--image` (local path or URL). Omit `--size` to match the input image dimensions.
+
+| Model | Description |
+|-------|-------------|
+| `qwen-image-edit-max` | Flagship editing model, strongest instruction following |
+| `qwen-image-edit-max-2026-01-16` | Latest max snapshot (Jan 2026) |
+| `qwen-image-edit-plus` | Faster, lower-cost editing |
 
 ### Qwen-Image legacy (ImageSynthesis API)
 
 | Model | Description |
 |-------|-------------|
 | `qwen-image-plus` | Distilled accelerated version of qwen-image-max |
+| `qwen-image-plus-2026-01-09` | qwen-image-plus snapshot (Jan 2026): faster high-quality generation |
 | `qwen-image` | Base model |
 
 ### Wan Series - Photorealistic Generation (ImageGeneration API)
@@ -86,6 +99,9 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py "A cute cat" outpu
 
 # Photorealistic with Wan model (Wan2.7 supports 4K)
 python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --model wan2.7-image-pro --size 4K "Realistic photo of mountains at sunset" photo.png
+
+# Edit an existing image (requires --image; local path or URL)
+python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --model qwen-image-edit-max --image input.png "Change the background to a beach at sunset" edited.png
 ```
 
 ### Size Options
@@ -191,6 +207,8 @@ export DASHSCOPE_API_BASE="https://dashscope-intl.aliyuncs.com/api/v1"
 | Photorealistic photos (4K) | `wan2.7-image-pro` |
 | Photorealistic photos (2K) | `wan2.7-image` |
 | Portrait photography | `wan2.7-image-pro` |
+| Image editing (best quality) | `qwen-image-edit-max` |
+| Image editing (fast, low-cost) | `qwen-image-edit-plus` |
 | Fast, low-cost generation | `z-image-turbo` |
 | High-fidelity portraits / product shots (fast) | `z-image-turbo` |
 | Fast photorealistic (Wan) | `wan2.2-t2i-flash` |

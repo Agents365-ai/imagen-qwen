@@ -9,6 +9,7 @@ Usage:
     python generate_image.py "prompt" [output_path]
     python generate_image.py --model wan2.7-image-pro "prompt" output.png
     python generate_image.py --size 2K "prompt" output.png
+    python generate_image.py --model qwen-image-edit-max --image input.png "edit instruction" output.png
 
 Environment variables:
     DASHSCOPE_API_KEY (required) - Alibaba Cloud Bailian API Key
@@ -25,13 +26,17 @@ Models:
         - qwen-image-2.0-pro (default, flagship)
         - qwen-image-2.0-pro-2026-06-22 (latest snapshot, generation + editing fusion)
         - qwen-image-2.0
-        - qwen-image-max
+        - qwen-image-max, qwen-image-max-2025-12-30
+
+    Qwen-Image edit family (image editing, requires --image) - uses MultiModalConversation:
+        - qwen-image-edit-max, qwen-image-edit-max-2026-01-16
+        - qwen-image-edit-plus
 
     Z-Image (lightweight, fast & low-cost) - uses MultiModalConversation:
         - z-image-turbo
 
     Qwen-Image legacy (text rendering) - uses ImageSynthesis:
-        - qwen-image-plus
+        - qwen-image-plus, qwen-image-plus-2026-01-09
         - qwen-image
 
     Wan Series (photorealistic) - uses ImageGeneration:
@@ -73,7 +78,7 @@ API_ENDPOINTS = {
 DEFAULT_API_BASE = API_ENDPOINTS["cn"]
 
 # Models using ImageSynthesis (legacy Qwen text rendering, prompt parameter)
-SYNTHESIS_MODELS = {"qwen-image-plus", "qwen-image"}
+SYNTHESIS_MODELS = {"qwen-image-plus", "qwen-image-plus-2026-01-09", "qwen-image"}
 
 # Models using ImageGeneration (Wan series, messages format)
 GENERATION_MODELS = {
@@ -86,11 +91,17 @@ GENERATION_MODELS = {
 # Models using MultiModalConversation (Qwen-Image 2.0 family, native 2K)
 MULTIMODAL_MODELS = {
     "qwen-image-2.0-pro", "qwen-image-2.0-pro-2026-06-22",
-    "qwen-image-2.0", "qwen-image-max",
+    "qwen-image-2.0", "qwen-image-max", "qwen-image-max-2025-12-30",
 }
 
 # Z-Image models (lightweight, fast) - also use MultiModalConversation
 ZIMAGE_MODELS = {"z-image-turbo"}
+
+# Qwen-Image edit models (image editing, require --image) - MultiModalConversation
+EDIT_MODELS = {
+    "qwen-image-edit-max", "qwen-image-edit-max-2026-01-16",
+    "qwen-image-edit-plus",
+}
 
 # Size presets for Qwen-Image 2.0 family (native up to 2048x2048)
 QWEN2_SIZES = {
@@ -158,6 +169,11 @@ def get_api_base():
 
 
 def resolve_size(size_input, model):
+    if model in EDIT_MODELS:
+        # No default: let the API match the input image dimensions
+        if not size_input:
+            return None
+        return size_input.replace("x", "*")
     if model in MULTIMODAL_MODELS:
         sizes = QWEN2_SIZES
         default = "2048*2048"
@@ -218,18 +234,23 @@ def generate_with_generation(api_key, model, prompt, size, negative_prompt=None)
     return ImageGeneration.call(**params)
 
 
-def generate_with_multimodal(api_key, model, prompt, size, negative_prompt=None):
-    """Generate image using MultiModalConversation (for qwen-image-2.0 family)."""
-    messages = [{"role": "user", "content": [{"text": prompt}]}]
+def generate_with_multimodal(api_key, model, prompt, size, negative_prompt=None, image=None):
+    """Generate image using MultiModalConversation (qwen-image-2.0/edit family, z-image)."""
+    content = []
+    if image:
+        content.append({"image": image})
+    content.append({"text": prompt})
+    messages = [{"role": "user", "content": content}]
     params = {
         "api_key": api_key,
         "model": model,
         "messages": messages,
         "n": 1,
-        "size": size,
         "prompt_extend": True,
         "watermark": False,
     }
+    if size:
+        params["size"] = size
     if negative_prompt:
         params["negative_prompt"] = negative_prompt
     return MultiModalConversation.call(**params)
@@ -277,6 +298,9 @@ def list_models():
     for m in sorted(MULTIMODAL_MODELS):
         default = " (default)" if m == DEFAULT_MODEL else ""
         print(f"  - {m}{default}")
+    print("\nQwen-Image edit family (image editing, requires --image) [MultiModalConversation API]:")
+    for m in sorted(EDIT_MODELS):
+        print(f"  - {m}")
     print("\nZ-Image (lightweight, fast & low-cost) [MultiModalConversation API]:")
     for m in sorted(ZIMAGE_MODELS):
         default = " (default)" if m == DEFAULT_MODEL else ""
@@ -318,6 +342,7 @@ Examples:
     parser.add_argument("--model", "-m", help=f"Model to use (default: {DEFAULT_MODEL})")
     parser.add_argument("--size", "-s", help="Image size as ratio or pixels")
     parser.add_argument("--negative", "-n", help="Negative prompt")
+    parser.add_argument("--image", "-i", help="Input image (path or URL) for editing models")
     parser.add_argument("--list-models", action="store_true", help="List available models")
     args = parser.parse_args()
 
@@ -334,25 +359,34 @@ Examples:
     size = resolve_size(args.size, model)
     output_path = Path(args.output)
 
-    all_models = SYNTHESIS_MODELS | GENERATION_MODELS | MULTIMODAL_MODELS | ZIMAGE_MODELS
+    all_models = SYNTHESIS_MODELS | GENERATION_MODELS | MULTIMODAL_MODELS | ZIMAGE_MODELS | EDIT_MODELS
     if model not in all_models:
         print(f"Warning: Unknown model '{model}'. Using {DEFAULT_MODEL}", file=sys.stderr)
         model = DEFAULT_MODEL
         size = resolve_size(args.size, model)
+
+    input_image = args.image
+    if model in EDIT_MODELS and not input_image:
+        print(f"Error: Model '{model}' is an editing model and requires --image", file=sys.stderr)
+        sys.exit(1)
+    if input_image and os.path.exists(input_image):
+        input_image = f"file://{Path(input_image).resolve()}"
 
     create_output_dir(output_path)
     dashscope.base_http_api_url = get_api_base()
 
     if model in SYNTHESIS_MODELS:
         api_type = "ImageSynthesis"
-    elif model in MULTIMODAL_MODELS or model in ZIMAGE_MODELS:
+    elif model in MULTIMODAL_MODELS or model in ZIMAGE_MODELS or model in EDIT_MODELS:
         api_type = "MultiModalConversation"
     else:
         api_type = "ImageGeneration"
     print(f"Generating image...")
     print(f"Prompt: \"{args.prompt}\"")
     print(f"Model: {model} ({api_type})")
-    print(f"Size: {size}")
+    if input_image:
+        print(f"Input image: {args.image}")
+    print(f"Size: {size or 'auto (match input image)'}")
     print(f"Endpoint: {dashscope.base_http_api_url}")
     print(f"Output: {output_path}")
     print()
@@ -360,8 +394,9 @@ Examples:
     try:
         if model in SYNTHESIS_MODELS:
             rsp = generate_with_synthesis(api_key, model, args.prompt, size, args.negative)
-        elif model in MULTIMODAL_MODELS or model in ZIMAGE_MODELS:
-            rsp = generate_with_multimodal(api_key, model, args.prompt, size, args.negative)
+        elif model in MULTIMODAL_MODELS or model in ZIMAGE_MODELS or model in EDIT_MODELS:
+            rsp = generate_with_multimodal(api_key, model, args.prompt, size, args.negative,
+                                           image=input_image)
         else:
             rsp = generate_with_generation(api_key, model, args.prompt, size, args.negative)
     except Exception as e:
