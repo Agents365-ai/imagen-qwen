@@ -1,4 +1,4 @@
-# Imagen-Qwen — AI Image Generation with Chinese Text Excellence
+# ImagenCN — AI Image Generation with Chinese Text Excellence
 
 [中文文档](README_CN.md)
 
@@ -10,7 +10,7 @@ A Claude Code / OpenClaw skill for AI image generation using Alibaba Cloud Baili
 |---------|-----------|-------------------|-------------------|
 | **Chinese text rendering** | ✓ Qwen-Image optimized | ✗ No image generation | Partial |
 | **Photorealistic images** | ✓ Wan series multi-model | ✗ No image generation | Partial |
-| **Multi-model selection** | ✓ 14 models to choose from | ✗ N/A | Usually single model |
+| **Multi-model selection** | ✓ 15+ models to choose from | ✗ N/A | Usually single model |
 | **Size presets** | ✓ 7+ aspect ratios | ✗ N/A | Partial |
 | **Negative prompts** | ✓ Fine-grained control | ✗ N/A | Partial |
 | **CLI direct invocation** | ✓ Script ready to use | ✗ N/A | Requires custom code |
@@ -24,8 +24,10 @@ A Claude Code / OpenClaw skill for AI image generation using Alibaba Cloud Baili
 ## Features
 
 - **Qwen-Image 2.0**: Latest flagship, native 2K, professional typography rendering
+- **Qwen-Image Edit**: Instruction-based image editing (`--image` input)
 - **Qwen-Image legacy**: Lighter Chinese/English text rendering models
 - **Wan Series**: Photorealistic images and photography-grade visuals, Wan2.7 supports 4K
+- **Z-Image**: Lightweight, fast and low-cost; high-fidelity portraits and product shots
 - **Multiple size presets**: 1:1, 16:9, 9:16, 4:3, 3:4, plus 1K/2K/4K
 - **Cross-platform**: Windows, macOS, Linux support
 - **Multiple API regions**: China (default), Singapore, Virginia
@@ -34,20 +36,20 @@ A Claude Code / OpenClaw skill for AI image generation using Alibaba Cloud Baili
 
 **Claude Code (global):**
 ```bash
-git clone https://github.com/Agents365-ai/imagen-qwen.git ~/.claude/skills/imagen-qwen
+git clone https://github.com/Agents365-ai/imagenCN.git ~/.claude/skills/imagenCN
 ```
 
 **Claude Code (project-specific):**
 ```bash
-git clone https://github.com/Agents365-ai/imagen-qwen.git .claude/skills/imagen-qwen
+git clone https://github.com/Agents365-ai/imagenCN.git .claude/skills/imagenCN
 ```
 
 **OpenClaw:**
 ```bash
-git clone https://github.com/Agents365-ai/imagen-qwen.git skills/imagen-qwen
+git clone https://github.com/Agents365-ai/imagenCN.git skills/imagenCN
 ```
 
-**SkillsMP:** Search `imagen-qwen` on [skillsmp.com](https://skillsmp.com) for one-click install.
+**SkillsMP:** Search `imagenCN` on [skillsmp.com](https://skillsmp.com) for one-click install.
 
 ## Requirements
 
@@ -97,19 +99,22 @@ Generate a 16:9 landscape wallpaper
 
 ```bash
 # Basic usage (default model: qwen-image-2.0-pro, native 2K)
-python ~/.claude/skills/imagen-qwen/scripts/generate_image.py "A cute cat" output.png
+python ~/.claude/skills/imagenCN/scripts/generate_image.py "A cute cat" output.png
 
 # Photorealistic 4K with Wan2.7
-python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --model wan2.7-image-pro --size 4K "Mountain sunset" photo.png
+python ~/.claude/skills/imagenCN/scripts/generate_image.py --model wan2.7-image-pro --size 4K "Mountain sunset" photo.png
 
 # Custom size
-python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --size 16:9 "Wide landscape" landscape.png
+python ~/.claude/skills/imagenCN/scripts/generate_image.py --size 16:9 "Wide landscape" landscape.png
+
+# Edit an existing image (requires --image)
+python ~/.claude/skills/imagenCN/scripts/generate_image.py --model qwen-image-edit-max --image input.png "Change the background to a beach" edited.png
 
 # With negative prompt
-python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --negative "blurry" "High quality portrait" portrait.png
+python ~/.claude/skills/imagenCN/scripts/generate_image.py --negative "blurry" "High quality portrait" portrait.png
 
 # List available models
-python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --list-models
+python ~/.claude/skills/imagenCN/scripts/generate_image.py --list-models
 ```
 
 ## Models
@@ -117,9 +122,15 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --list-models
 | Model | Best For |
 |-------|----------|
 | `qwen-image-2.0-pro` | **Default**, latest flagship, native 2K, strongest typography and detail |
+| `qwen-image-2.0-pro-2026-06-22` | Latest snapshot (Jun 2026), generation + editing fusion |
 | `qwen-image-2.0` | Standard 2.0 tier, native 2K |
 | `qwen-image-max` | Previous-gen flagship |
+| `qwen-image-max-2025-12-30` | qwen-image-max snapshot, improved realism |
 | `qwen-image-plus` | Distilled accelerated version |
+| `qwen-image-plus-2026-01-09` | qwen-image-plus snapshot (Jan 2026) |
+| `qwen-image-edit-max` | Flagship image editing (requires `--image`) |
+| `qwen-image-edit-max-2026-01-16` | Latest editing snapshot (Jan 2026) |
+| `qwen-image-edit-plus` | Fast, lower-cost image editing |
 | `qwen-image` | Base model |
 | `wan2.7-image-pro` | Latest photorealistic, up to 4K output |
 | `wan2.7-image` | Wan 2.7 standard, up to 2K |
@@ -130,6 +141,7 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --list-models
 | `wanx2.1-t2i-turbo` | Fast execution |
 | `wanx2.1-t2i-plus` | Professional tier |
 | `wanx2.0-t2i-turbo` | Earlier generation |
+| `z-image-turbo` | Lightweight, fast & low-cost; portraits and product images |
 
 ## Size Presets
 
@@ -148,6 +160,13 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --list-models
 - `9:16` → 928×1664
 - `4:3` → 1472×1104
 - `3:4` → 1104×1472
+
+**Z-Image (pixel area 512×512 to 2048×2048):**
+- `1:1` → 1024×1024 (default)
+- `16:9` → 1280×720
+- `9:16` → 720×1280
+- `2:3` → 1024×1536
+- `3:2` → 1536×1024
 
 **Wan Series (Wan2.7 also accepts `1K`/`2K`/`4K`):**
 - `1:1` → 1024×1024

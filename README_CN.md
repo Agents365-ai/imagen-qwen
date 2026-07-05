@@ -1,4 +1,4 @@
-# Imagen-Qwen — 阿里云百炼 AI 图像生成技能
+# ImagenCN — 阿里云百炼 AI 图像生成技能
 
 [English](README.md)
 
@@ -10,7 +10,7 @@
 |------|--------|-----------------|-------------|
 | **中文文字渲染** | ✓ 通义千问专项优化 | ✗ 无图像生成能力 | 部分支持 |
 | **写实摄影级图像** | ✓ 通义万相多模型 | ✗ 无图像生成能力 | 部分支持 |
-| **多模型可选** | ✓ 14 个模型按需切换 | ✗ 不适用 | 通常单模型 |
+| **多模型可选** | ✓ 15+ 个模型按需切换 | ✗ 不适用 | 通常单模型 |
 | **多尺寸预设** | ✓ 7+ 尺寸比例 | ✗ 不适用 | 部分支持 |
 | **负面提示词** | ✓ 精细控制 | ✗ 不适用 | 部分支持 |
 | **命令行直接调用** | ✓ 脚本即用 | ✗ 不适用 | 需自行编写 |
@@ -24,8 +24,10 @@
 ## 特性
 
 - **通义千问 2.0 (Qwen-Image 2.0)**: 最新旗舰，原生 2K 分辨率，专业字体渲染
+- **通义千问编辑版 (Qwen-Image Edit)**: 指令式图像编辑（需 `--image` 输入图）
 - **通义千问经典版 (Qwen-Image legacy)**: 中英文文本渲染
 - **通义万相 (Wan Series)**: 写实图像和摄影级视觉效果，Wan2.7 支持 4K 输出
+- **Z-Image**: 轻量快速、低成本；擅长高保真人像和商品图
 - **多种尺寸预设**: 1:1, 16:9, 9:16, 4:3, 3:4，以及 1K/2K/4K
 - **跨平台**: 支持 Windows, macOS, Linux
 - **多区域 API**: 中国（默认）、新加坡、弗吉尼亚
@@ -34,20 +36,20 @@
 
 **Claude Code（全局）：**
 ```bash
-git clone https://github.com/Agents365-ai/imagen-qwen.git ~/.claude/skills/imagen-qwen
+git clone https://github.com/Agents365-ai/imagenCN.git ~/.claude/skills/imagenCN
 ```
 
 **Claude Code（仅当前项目）：**
 ```bash
-git clone https://github.com/Agents365-ai/imagen-qwen.git .claude/skills/imagen-qwen
+git clone https://github.com/Agents365-ai/imagenCN.git .claude/skills/imagenCN
 ```
 
 **OpenClaw：**
 ```bash
-git clone https://github.com/Agents365-ai/imagen-qwen.git skills/imagen-qwen
+git clone https://github.com/Agents365-ai/imagenCN.git skills/imagenCN
 ```
 
-**SkillsMP：** 在 [skillsmp.com](https://skillsmp.com) 搜索 `imagen-qwen`，一键安装。
+**SkillsMP：** 在 [skillsmp.com](https://skillsmp.com) 搜索 `imagenCN`，一键安装。
 
 ## 系统要求
 
@@ -97,19 +99,22 @@ export DASHSCOPE_API_BASE="cn"  # 或 "sg", "us", 或完整 URL
 
 ```bash
 # 基本用法（默认模型: qwen-image-2.0-pro，原生 2K）
-python ~/.claude/skills/imagen-qwen/scripts/generate_image.py "一只可爱的猫咪" output.png
+python ~/.claude/skills/imagenCN/scripts/generate_image.py "一只可爱的猫咪" output.png
 
 # 使用 Wan2.7 模型生成 4K 写实图像
-python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --model wan2.7-image-pro --size 4K "山间日落" photo.png
+python ~/.claude/skills/imagenCN/scripts/generate_image.py --model wan2.7-image-pro --size 4K "山间日落" photo.png
 
 # 自定义尺寸
-python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --size 16:9 "宽屏风景" landscape.png
+python ~/.claude/skills/imagenCN/scripts/generate_image.py --size 16:9 "宽屏风景" landscape.png
+
+# 编辑已有图片（需 --image）
+python ~/.claude/skills/imagenCN/scripts/generate_image.py --model qwen-image-edit-max --image input.png "把背景换成海滩日落" edited.png
 
 # 使用负面提示词
-python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --negative "模糊" "高质量人像" portrait.png
+python ~/.claude/skills/imagenCN/scripts/generate_image.py --negative "模糊" "高质量人像" portrait.png
 
 # 列出可用模型
-python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --list-models
+python ~/.claude/skills/imagenCN/scripts/generate_image.py --list-models
 ```
 
 ## 模型
@@ -117,9 +122,15 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --list-models
 | 模型 | 最佳用途 |
 |------|----------|
 | `qwen-image-2.0-pro` | **默认**，最新旗舰，原生 2K，最强字体与细节 |
+| `qwen-image-2.0-pro-2026-06-22` | 最新快照版（2026 年 6 月），生成与编辑能力融合 |
 | `qwen-image-2.0` | 标准 2.0 版本，原生 2K |
 | `qwen-image-max` | 上代旗舰 |
+| `qwen-image-max-2025-12-30` | qwen-image-max 快照版，写实感增强、AI 痕迹更少 |
 | `qwen-image-plus` | 蒸馏加速版 |
+| `qwen-image-plus-2026-01-09` | qwen-image-plus 快照版（2026 年 1 月） |
+| `qwen-image-edit-max` | 旗舰图像编辑模型（需 `--image`） |
+| `qwen-image-edit-max-2026-01-16` | 最新编辑快照版（2026 年 1 月） |
+| `qwen-image-edit-plus` | 快速低成本图像编辑 |
 | `qwen-image` | 基础版 |
 | `wan2.7-image-pro` | 最新写实模型，最高 4K 输出 |
 | `wan2.7-image` | Wan 2.7 标准版，最高 2K |
@@ -130,6 +141,7 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --list-models
 | `wanx2.1-t2i-turbo` | 快速执行 |
 | `wanx2.1-t2i-plus` | 专业级 |
 | `wanx2.0-t2i-turbo` | 早期版本 |
+| `z-image-turbo` | 轻量快速、低成本；人像和商品图 |
 
 ## 尺寸预设
 
@@ -148,6 +160,13 @@ python ~/.claude/skills/imagen-qwen/scripts/generate_image.py --list-models
 - `9:16` → 928×1664
 - `4:3` → 1472×1104
 - `3:4` → 1104×1472
+
+**Z-Image（像素面积 512×512 至 2048×2048）:**
+- `1:1` → 1024×1024（默认）
+- `16:9` → 1280×720
+- `9:16` → 720×1280
+- `2:3` → 1024×1536
+- `3:2` → 1536×1024
 
 **通义万相（Wan2.7 还支持 `1K`/`2K`/`4K`）:**
 - `1:1` → 1024×1024
