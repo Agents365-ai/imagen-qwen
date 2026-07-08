@@ -25,7 +25,7 @@ A Claude Code / OpenClaw skill for AI image generation using Alibaba Cloud Baili
 
 ## Pipeline
 
-<img src="assets/workflow.png" width="600" alt="imagenCN Workflow">
+<img src="assets/workflow.png" width="450" alt="imagenCN Workflow">
 
 ## Features
 
