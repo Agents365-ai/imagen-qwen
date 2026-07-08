@@ -23,7 +23,7 @@
 
 ## 工作流程
 
-![imagenCN 工作流程](assets/workflow-cn.png)
+<img src="assets/workflow-cn.png" width="600" alt="imagenCN 工作流程">
 
 ## 特性
 
