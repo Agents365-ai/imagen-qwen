@@ -23,6 +23,10 @@ A Claude Code / OpenClaw skill for AI image generation using Alibaba Cloud Baili
 - **Platform choice** — Pick DashScope for text, Volcano Ark for photo+text combo, Hunyuan for complex composition
 - **Ready to use** — `pip install` two packages + one API key to get started
 
+## Pipeline
+
+![imagenCN Workflow](assets/workflow.png)
+
 ## Features
 
 - **Alibaba Cloud Bailian (DashScope)**: Qwen-Image 2.0, Edit, Wan Series, Z-Image — 19 models
