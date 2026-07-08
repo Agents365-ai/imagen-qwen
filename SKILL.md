@@ -192,6 +192,9 @@ python ~/.claude/skills/imagenCN/scripts/generate_image.py --list-models
 
 ```bash
 pip install dashscope requests
+
+# Optional: for coloured output and styled tables
+pip install rich
 ```
 
 ## Environment Variables
@@ -215,6 +218,27 @@ Get API Keys:
 - DashScope: https://bailian.console.aliyun.com/
 - Volcano Ark: https://console.volcengine.com/ark/region:ark+cn-beijing/apikey
 - Tencent Hunyuan: https://console.cloud.tencent.com/tokenhub/apikey
+
+## Config File (Optional)
+
+Create `~/.imagenCN.json` for personal defaults, or `.imagenCN.json` in a project
+directory for per-project overrides.  API keys stay in environment variables for
+security.
+
+```json
+{
+  "platform": "ark",
+  "model": "doubao-seedream-5-0-260128",
+  "size": "2K"
+}
+```
+
+All keys are optional.  Priority (highest first):
+1. CLI arguments (`--platform`, `--model`, `--size`)
+2. Project config (`.imagenCN.json` in current directory)
+3. User config (`~/.imagenCN.json`)
+4. Environment variables (`DASHSCOPE_MODEL`, `ARK_MODEL`, `HUNYUAN_MODEL`)
+5. Built-in defaults
 
 ## API Endpoints
 
