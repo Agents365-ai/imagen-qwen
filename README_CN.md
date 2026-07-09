@@ -1,27 +1,15 @@
 # ImagenCN — 阿里云百炼 AI 图像生成技能
 
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](LICENSE)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-6C3C97)](https://claude.ai/code)
+[![OpenClaw](https://img.shields.io/badge/OpenClaw-compatible-orange)](https://openclaw.ai)
+[![SkillsMP](https://img.shields.io/badge/SkillsMP-indexed-blue)](https://skillsmp.com)
+
 [English](README.md)
 
 自然语言生成高质量图像的 Claude Code / OpenClaw 技能，支持阿里云百炼、字节火山方舟、腾讯混元、智谱 BigModel、阶跃星辰五大平台。
 
 📋 **[模型参考](https://agents365-ai.github.io/imagenCN/docs/models.html)** — 浏览全部 30 个模型，含价格、分辨率、功能对比。
-
-## 为什么选择这个技能？
-
-| 特性 | 本技能 | 原生 Claude Code | 其他图像技能 |
-|------|--------|-----------------|-------------|
-| **中文文字渲染** | ✓ 通义千问专项优化 | ✗ 无图像生成能力 | 部分支持 |
-| **写实摄影级图像** | ✓ 通义万相多模型 | ✗ 无图像生成能力 | 部分支持 |
-| **多模型可选** | ✓ 28+ 个模型按需切换 | ✗ 不适用 | 通常单模型 |
-| **多尺寸预设** | ✓ 7+ 尺寸比例 | ✗ 不适用 | 部分支持 |
-| **负面提示词** | ✓ 精细控制 | ✗ 不适用 | 部分支持 |
-| **命令行直接调用** | ✓ 脚本即用 | ✗ 不适用 | 需自行编写 |
-| **多区域 API** | ✓ 中国/新加坡/弗吉尼亚 | ✗ 不适用 | 通常单区域 |
-
-**核心优势：**
-- **中文文字最佳** — 通义千问是目前在图像上渲染中文效果最好的模型之一
-- **写实+艺术兼备** — 通义万相系列覆盖从快速草稿到专业级输出
-- **即装即用** — `pip install` 两个包 + 一个 API 密钥即可开始
 
 ## 工作流程
 
@@ -38,24 +26,32 @@
 - **跨平台**: 支持 Windows, macOS, Linux
 - **多区域 API**: 中国（默认）、新加坡、弗吉尼亚（DashScope）
 
-## 安装技能
+## 安装
 
-**Claude Code（全局）：**
+### Claude Code 插件市场（推荐）
 ```bash
-git clone https://github.com/Agents365-ai/imagenCN.git ~/.claude/skills/imagenCN
+/plugin install imagenCN@365-skills
 ```
 
-**Claude Code（仅当前项目）：**
+或者告诉你的 coding agent：
+> help me to install https://github.com/Agents365-ai/imagenCN.git
+
+### 手动安装
 ```bash
+# 全局安装
+git clone https://github.com/Agents365-ai/imagenCN.git ~/.claude/skills/imagenCN
+
+# 仅当前项目
 git clone https://github.com/Agents365-ai/imagenCN.git .claude/skills/imagenCN
 ```
 
-**OpenClaw：**
+### OpenClaw
 ```bash
 git clone https://github.com/Agents365-ai/imagenCN.git skills/imagenCN
 ```
 
-**SkillsMP：** 在 [skillsmp.com](https://skillsmp.com) 搜索 `imagenCN`，一键安装。
+### SkillsMP
+在 [skillsmp.com](https://skillsmp.com) 搜索 `imagenCN`，一键安装。
 
 ## 系统要求
 

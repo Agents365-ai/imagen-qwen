@@ -1,29 +1,15 @@
 # ImagenCN — AI Image Generation with Chinese Text Excellence
 
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](LICENSE)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-6C3C97)](https://claude.ai/code)
+[![OpenClaw](https://img.shields.io/badge/OpenClaw-compatible-orange)](https://openclaw.ai)
+[![SkillsMP](https://img.shields.io/badge/SkillsMP-indexed-blue)](https://skillsmp.com)
+
 [中文文档](README_CN.md)
 
 A Claude Code / OpenClaw skill for AI image generation using Alibaba Cloud Bailian, ByteDance Volcano Ark, Tencent Hunyuan, Zhipu BigModel, and StepFun APIs.
 
 📋 **[Model Reference](https://agents365-ai.github.io/imagenCN/docs/models.html)** — browse all 30 models with pricing, resolution, and feature comparison.
-
-## Why This Skill?
-
-| Feature | This Skill | Native Claude Code | Other Image Skills |
-|---------|-----------|-------------------|-------------------|
-| **Chinese text rendering** | ✓ Qwen-Image optimized | ✗ No image generation | Partial |
-| **Photorealistic images** | ✓ Wan + Seedream multi-model | ✗ No image generation | Partial |
-| **Multi-platform** | ✓ 5 platforms, 28+ models | ✗ N/A | Usually single platform |
-| **Multi-model selection** | ✓ 28+ models to choose from | ✗ N/A | Usually single model |
-| **Size presets** | ✓ 10+ aspect ratios | ✗ N/A | Partial |
-| **Negative prompts** | ✓ Fine-grained control | ✗ N/A | Partial |
-| **CLI direct invocation** | ✓ Script ready to use | ✗ N/A | Requires custom code |
-| **Multi-region API** | ✓ China / Singapore / US (DashScope) | ✗ N/A | Usually single region |
-
-**Key advantages:**
-- **Best Chinese text** — Qwen-Image is one of the best models for rendering Chinese text on images
-- **Realism + art** — Wan series + Seedream cover everything from quick drafts to professional 4K output
-- **Platform choice** — Pick DashScope for text, Volcano Ark for photo+text combo, Hunyuan for complex composition
-- **Ready to use** — `pip install` two packages + one API key to get started
 
 ## Pipeline
 
@@ -40,24 +26,32 @@ A Claude Code / OpenClaw skill for AI image generation using Alibaba Cloud Baili
 - **Cross-platform**: Windows, macOS, Linux support
 - **Multiple API regions**: China (default), Singapore, Virginia (DashScope)
 
-## Install the Skill
+## Installation
 
-**Claude Code (global):**
+### Claude Code Marketplace (recommended)
 ```bash
-git clone https://github.com/Agents365-ai/imagenCN.git ~/.claude/skills/imagenCN
+/plugin install imagenCN@365-skills
 ```
 
-**Claude Code (project-specific):**
+Or tell your coding agent:
+> help me to install https://github.com/Agents365-ai/imagenCN.git
+
+### Manual
 ```bash
+# Global install
+git clone https://github.com/Agents365-ai/imagenCN.git ~/.claude/skills/imagenCN
+
+# Project-specific
 git clone https://github.com/Agents365-ai/imagenCN.git .claude/skills/imagenCN
 ```
 
-**OpenClaw:**
+### OpenClaw
 ```bash
 git clone https://github.com/Agents365-ai/imagenCN.git skills/imagenCN
 ```
 
-**SkillsMP:** Search `imagenCN` on [skillsmp.com](https://skillsmp.com) for one-click install.
+### SkillsMP
+Search `imagenCN` on [skillsmp.com](https://skillsmp.com) for one-click install.
 
 ## Requirements
 
